@@ -3,6 +3,7 @@ import { defineStore} from 'pinia'
 export interface PkmnState {
     name: string | null;
     height: number | null;
+    id: number | null;
     abilities: {
         ability: [{
             name: string | null; }]
@@ -44,6 +45,7 @@ export const usePokemonStore = defineStore('pkmn', () => {
         name: null,
         height: null,
         weight: null,
+        id: null,
         moves: [],
         sprites:  {
             other: {
@@ -69,11 +71,20 @@ export const usePokemonStore = defineStore('pkmn', () => {
             name: null,
             height: null,
             weight: null,
-            moves: null,
-            sprites: null,
-            stats: null,
-            types: null,
-            abilities: null,
+            id: null,
+            moves: [],
+            sprites:  {
+                other: {
+                    official_artwork: {
+                        front_default: '',
+                    },
+                },
+            },
+            stats: [],
+            types: [],
+            abilities: {
+                ability: [{ name: null }],
+            },
         };
     };
 

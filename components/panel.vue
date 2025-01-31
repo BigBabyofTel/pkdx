@@ -5,6 +5,12 @@
 *
 * */
 
+import { usePokemonStore} from "~/composables/pokemonStore";
+
+import getPokemon from "~/composables/pokemon";
+
+const pokemon = await getPokemon()
+
 
 
 
@@ -18,6 +24,7 @@
       </template>
       <div class="border h-full w-2/3 p-5 bg-slate-300">
         <slot />
+        {{ pokemon }}
       </div>
     </el-card>
 </template>
