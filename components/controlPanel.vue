@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { PkmnState } from '~/utils/types';
+import { Evolutions, PkmnState } from '~/utils/types';
 import { ref } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
-import imagePortal from './imagePortal.vue';
 
-const { setPokemonData, pokemonData } = usePokemonStore();
+const { setPokemonData, pokemonData, setEvolutions } = usePokemonStore();
 
 const search = ref<string | number | null>();
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 const pokemon = ref<PkmnState | null>(null);
+const pkId = ref<number | null>(null);
+const evolutions = ref<Evolutions | null>(null);
 
 const updateValue = useDebounceFn((value: string | number | null) => {
   search.value = value;
@@ -43,16 +44,38 @@ const handleSubmit = async () => {
         console.error('Failed to fetch data');
       }
       const data: PkmnState = await response.json();
+      pkId.value = data.id;
+
+      const forms = await getEvolutions();
+      if (forms) {
+        evolutions.value = forms;
+      }
 
       setPokemonData(data);
-      pokemon.value = data;
-      return data;
+      return (pokemon.value = data);
     } catch (error) {
       console.error('Failed to fetch Pokémon:', error);
       throw error;
     }
   }
 };
+
+async function getEvolutions() {
+  try {
+    const response = await fetch(
+      `https://pokeapi.co/api/v2/evolution-chain/${pkId.value}/`,
+    );
+
+    if (!response.ok) {
+      console.log('there is no data');
+    } else {
+      const data: Evolutions = await response.json();
+      return data;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
 </script>
 
 <template>
@@ -72,14 +95,16 @@ const handleSubmit = async () => {
       </div>
     </template>
 
-    <div v-if="isLoading" class="text-center">Loading...</div>
-
     <div v-if="error" class="text-red-500">{{ error }}</div>
 
     <div
       class="border h-full w-full p-5 bg-slate-300 grid grid-cols-7 grid-rows-7 gap-2"
     >
-      <imagePortal v-if="pokemon" :pokemon="pokemon" />
+      <imagePortal :pokemon="pokemon" v-if="pokemon" />
+      <InfoDisplay :pokemon="pokemon" v-if="pokemon" />
+      <StatsDisplay :pokemon="pokemon" v-if="pokemon" />
+      <dataView :evolutions="evolutions" v-if="pokemon" />
+      <movesList :pokemon="pokemon" v-if="pokemon" />
     </div>
   </el-card>
 </template>

@@ -4,6 +4,22 @@ GET https://examples.http-client.intellij.net/get
 
 ###
 
-GET https://pokeapi.co/api/v2/pokemon/1
+GET https://pokeapi.co/api/v2/pokemon/2
+
+###
+
+GET https://pokeapi.co/api/v2/evolution-chain/20/
+
+###
+
+GET https://pokeapi.co/api/v2/pokemon-species/3/
+
+###
+
+GET https://pokeapi.co/api/v2/evolution-trigger/1/
+
+###
+
+GET https://pokeapi.co/api/v2/pokemon-species/2/
 
 ###

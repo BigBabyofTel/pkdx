@@ -1,24 +1,23 @@
 <script setup lang="ts">
-import getPokemon from '~/composables/pokemon';
+import type { PropType } from 'vue';
+import { PkmnState } from '~/utils/types';
 
-const { pokemonData } = usePokemonStore();
-
-
-const moves = ref(pokemonData.moves);
-
-onMounted(async () => {
-	await getPokemon();
+defineProps({
+  pokemon: {
+    type: Object as PropType<PkmnState>, // Use PropType for complex types
+    required: true, // This prop is required
+  },
 });
 </script>
 
 <template>
-	<el-card class="row-start-1 row-span-9 col-start-7">
-		<div class="overflow-auto">
-			<ul>
-				<li v-for="move in moves">
-					{{ move.move.name }}
-				</li>
-			</ul>
-		</div>
-	</el-card>
+  <el-card class="row-start-1 row-span-9 col-start-7">
+    <div class="overflow-auto">
+      <ul>
+        <li v-for="move in pokemon.moves" v-if="pokemon">
+          {{ move.move.name }}
+        </li>
+      </ul>
+    </div>
+  </el-card>
 </template>
