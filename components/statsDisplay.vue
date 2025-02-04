@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-  <el-card class="row-start-1 row-end-4 col-start-3 col-end-7">
+  <el-card class="row-start-1 row-end-3 col-start-3 col-end-6">
     <div>
       <ul>
         <li v-for="stat in pokemon.stats" key="stats">

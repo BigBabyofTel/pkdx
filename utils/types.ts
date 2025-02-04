@@ -58,3 +58,9 @@ export interface Evolutions {
     ];
   };
 }
+
+export interface PkmnSpecies {
+  evolution_chain: {
+    url: string | null;
+  };
+}

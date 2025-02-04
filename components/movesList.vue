@@ -10,9 +10,9 @@ defineProps({
 });
 </script>
 
-<template>
-  <el-card class="row-start-1 row-span-9 col-start-7">
-    <div class="overflow-auto">
+<template class="overflow-y-scroll">
+  <el-card class="row-start-1 row-span-3 col-start-6 col-end-8">
+    <div class="">
       <ul>
         <li v-for="move in pokemon.moves" v-if="pokemon">
           {{ move.move.name }}

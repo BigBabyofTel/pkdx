@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-  <el-card class="row-span-6 col-start-2 col-end-7">
+  <el-card class="row-span-1 col-start-3 col-end-6">
     <div>
       <figure>
         {{ evolutions?.chain.evolves_to[0].species.name }}

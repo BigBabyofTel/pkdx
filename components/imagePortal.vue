@@ -13,7 +13,7 @@ defineProps({
 <template>
   <el-card
     shadow="always"
-    class="col-start-1 col-end-3 row-start-1 row-end-4 w-full h-full"
+    class="col-start-1 col-end-3 row-start-1 row-end-3 w-full h-full"
   >
     <h1>{{ getCapital(pokemon.name as string) }}</h1>
     <img
