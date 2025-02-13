@@ -11,14 +11,4 @@ export default defineNuxtConfig({
   ],
   devtools: { enabled: false },
   compatibilityDate: '2024-11-01',
-  eslint: {},
-  pinia: {
-    storesDirs: ['./stores/**', './custom-folder/stores/**'],
-  },
-  tailwindcss: {
-    cssPath: ['~/assets/css/tailwind.css', { injectPosition: 'first' }],
-    config: {},
-    viewer: true,
-    exposeConfig: false,
-  },
 });

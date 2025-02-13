@@ -2,13 +2,13 @@ export interface PkmnState {
   name: string | null;
   height: number | null;
   id: number | null;
-  abilities: {
-    ability: [
-      {
+  abilities: [
+    {
+      ability: {
         name: string | null;
-      },
-    ];
-  };
+      };
+    },
+  ];
   sprites: {
     other?: {
       official_artwork: {
@@ -24,13 +24,14 @@ export interface PkmnState {
       url: string;
     };
   }[];
-  types: {
-    slot: number;
-    type: {
-      name: string;
-      url: string;
-    };
-  }[];
+  types: [
+    {
+      slot: number | null;
+      type: {
+        name: string;
+      };
+    },
+  ];
   weight: number | null;
   moves: {
     move: {

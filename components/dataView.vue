@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Evolutions, PkmnState } from '~/utils/types';
+import type { Evolutions } from '~/utils/types';
 import type { PropType } from 'vue';
 
 defineProps({
@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-  <el-card class="row-span-1 col-start-3 col-end-6">
+  <el-card class="row-span-3 col-start-3 col-end-7">
     <div>
       <figure>
         {{ evolutions?.chain.evolves_to[0].species.name }}

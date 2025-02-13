@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { PkmnState } from '#imports';
-import { Evolutions } from '~/utils/types';
+import type { PkmnState, Evolutions } from '../utils/types';
 
 export const usePokemonStore = defineStore('pkmn', () => {
   // state
@@ -19,10 +18,19 @@ export const usePokemonStore = defineStore('pkmn', () => {
       },
     },
     stats: [],
-    types: [],
-    abilities: {
-      ability: [{ name: null }],
-    },
+    types: [
+      {
+        slot: null,
+        type: {
+          name: null,
+        },
+      },
+    ],
+    abilities: [
+      {
+        ability: { name: null },
+      },
+    ],
   });
 
   const evolutions = ref<Evolutions>({
@@ -68,10 +76,19 @@ export const usePokemonStore = defineStore('pkmn', () => {
         },
       },
       stats: [],
-      types: [],
-      abilities: {
-        ability: [{ name: null }],
-      },
+      types: [
+        {
+          slot: null,
+          type: {
+            name: null,
+          },
+        },
+      ],
+      abilities: [
+        {
+          ability: { name: null },
+        },
+      ],
     };
   };
 

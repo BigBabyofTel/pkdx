@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import { PkmnState } from '~/utils/types';
+import type { PkmnState } from '../utils/types';
 
 defineProps({
   pokemon: {
@@ -10,14 +10,16 @@ defineProps({
 });
 </script>
 
-<template class="overflow-y-scroll">
-  <el-card class="row-start-1 row-span-3 col-start-6 col-end-8">
-    <div class="">
+<template>
+  <el-scrollbar
+    class="row-start-1 row-span-5 col-start-7 col-end-8 h-full w-full overflow-y-auto"
+  >
+    <el-card>
       <ul>
-        <li v-for="move in pokemon.moves" v-if="pokemon">
+        <li v-for="move in pokemon.moves" :key="move.move.name">
           {{ move.move.name }}
         </li>
       </ul>
-    </div>
-  </el-card>
+    </el-card>
+  </el-scrollbar>
 </template>

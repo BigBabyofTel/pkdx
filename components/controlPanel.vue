@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { Evolutions, PkmnSpecies, PkmnState } from '~/utils/types';
+import type { Evolutions, PkmnSpecies, PkmnState } from '../utils/types';
 import { ref } from 'vue';
+import { usePokemonStore } from '../composables/pokemonStore';
 import { useDebounceFn } from '@vueuse/core';
+import Icon from '@iconify/vue';
+import InfoDisplay from './infoDisplay.vue';
+import ImagePortal from './imagePortal.vue';
+import StatsDisplay from './statsDisplay.vue';
+import DataView from './dataView.vue';
+import MovesList from './movesList.vue';
 
 const { setPokemonData } = usePokemonStore();
 
@@ -34,6 +41,7 @@ const handleSubmit = async () => {
     }
   } catch (err) {
     error.value = 'Failed to find Pokémon';
+    console.error(err);
   }
 
   async function fetchData() {
@@ -96,18 +104,18 @@ async function extractForms() {
 </script>
 
 <template>
-  <el-card shadow="hover" class="h-[95vh]">
+  <el-card shadow="hover" class="h-[95vh] w-full">
     <template #header>
       <div class="flex items-center">
         <input
           :value="search"
           type="text"
-          @input="(e) => updateValue((e.target as HTMLInputElement).value)"
           placeholder="Search Pokémon by name or ID..."
           class="p-3"
+          @input="(e) => updateValue((e.target as HTMLInputElement).value)"
         />
         <button @click="handleSubmit">
-          <Icon name="material-symbols:search" :size="40" />
+          <Icon name="material-symbols:search" :style="{ fontSize: '36px' }" />
         </button>
       </div>
     </template>
@@ -115,13 +123,13 @@ async function extractForms() {
     <div v-if="error" class="text-red-500">{{ error }}</div>
 
     <div
-      class="border h-[99vh] w-full p-5 bg-slate-300 grid grid-cols-7 grid-rows-4 gap-2"
+      class="border h-[80vh] w-full p-5 bg-slate-300 grid grid-cols-7 grid-rows-4 gap-2"
     >
-      <imagePortal :pokemon="pokemon" v-if="pokemon" />
-      <InfoDisplay :pokemon="pokemon" v-if="pokemon" />
-      <StatsDisplay :pokemon="pokemon" v-if="pokemon" />
-      <dataView v-if="pokemon" />
-      <movesList :pokemon="pokemon" v-if="pokemon" />
+      <Image-portal v-if="pokemon" :pokemon="pokemon" />
+      <InfoDisplay v-if="pokemon" :pokemon="pokemon" />
+      <StatsDisplay v-if="pokemon" :pokemon="pokemon" />
+      <dataView v-if="pokemon" :evolutions="evolutions" />
+      <movesList v-if="pokemon" :pokemon="pokemon" />
     </div>
   </el-card>
 </template>

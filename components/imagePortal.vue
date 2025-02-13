@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import { PkmnState } from '~/utils/types';
+import type { PkmnState } from '~/utils/types';
 
 defineProps({
   pokemon: {
@@ -19,6 +19,7 @@ defineProps({
     <img
       :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id as number}.png`"
       :alt="`Pokemon #${pokemon.id}`"
-    />
+      class="w-4/5 mx-auto"
+    >
   </el-card>
 </template>
