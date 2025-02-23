@@ -1,22 +1,16 @@
 <script setup lang="ts">
-import type { Evolutions } from '~/utils/types';
 import type { PropType } from 'vue';
+import type { PkmnSpecies } from '../utils/types';
 
 defineProps({
-  evolutions: {
-    type: Object as PropType<Evolutions | null>, // Use PropType for complex types
-    required: true, // This prop is required
+  data: {
+    type: Object as PropType<PkmnSpecies | null>,
   },
 });
 </script>
 
 <template>
   <el-card class="row-span-3 col-start-3 col-end-7">
-    <div>
-      <figure>
-        {{ evolutions?.chain.evolves_to[0].species.name }}
-        {{ evolutions?.chain.evolves_to[0].evolves_to[0].species.name }}
-      </figure>
-    </div>
+    {{ data.flavor_text_entries[0].flavor_text }}
   </el-card>
 </template>

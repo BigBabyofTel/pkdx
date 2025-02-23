@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { PkmnState, Evolutions } from '../utils/types';
+import type { PkmnState, Evolutions, EvoName } from '../utils/types';
 
 export const usePokemonStore = defineStore('pkmn', () => {
   // state
@@ -52,6 +52,11 @@ export const usePokemonStore = defineStore('pkmn', () => {
     },
   });
 
+  const evoNames = ref<EvoName>({
+    firstForm: null,
+    secondForm: null,
+  });
+
   // actions
   const setPokemonData = (data: PkmnState) => {
     pokemonData.value = data;
@@ -59,6 +64,10 @@ export const usePokemonStore = defineStore('pkmn', () => {
 
   const setEvolutions = (data: Evolutions) => {
     evolutions.value = data;
+  };
+
+  const setEvoNames = (data: EvoName) => {
+    evoNames.value = data;
   };
 
   const clearPokemonData = () => {
@@ -98,5 +107,7 @@ export const usePokemonStore = defineStore('pkmn', () => {
     clearPokemonData,
     evolutions,
     setEvolutions,
+    evoNames,
+    setEvoNames,
   };
 });

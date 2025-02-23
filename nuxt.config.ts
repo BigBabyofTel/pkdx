@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@nuxt/icon',
+    '@primevue/nuxt-module',
   ],
   devtools: { enabled: false },
   compatibilityDate: '2024-11-01',

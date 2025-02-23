@@ -1,24 +1,22 @@
 <script setup lang="ts">
-import type { Evolutions, PkmnSpecies, PkmnState } from '../utils/types';
+import type { PkmnSpecies, PkmnState } from '../utils/types';
 import { ref } from 'vue';
 import { usePokemonStore } from '../composables/pokemonStore';
 import { useDebounceFn } from '@vueuse/core';
-import Icon from '@iconify/vue';
 import InfoDisplay from './infoDisplay.vue';
 import ImagePortal from './imagePortal.vue';
 import StatsDisplay from './statsDisplay.vue';
 import DataView from './dataView.vue';
 import MovesList from './movesList.vue';
 
-const { setPokemonData } = usePokemonStore();
+const { setPokemonData, clearPokemonData } = usePokemonStore();
 
 const search = ref<string | number | null>();
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 const pokemon = ref<PkmnState | null>(null);
 const pkId = ref<number | null>(null);
-const evolutions = ref<Evolutions | null>(null);
-const evoData = ref<string | null>();
+const dataEntry = ref<PkmnSpecies | null>(null);
 
 const updateValue = useDebounceFn((value: string | number | null) => {
   search.value = value;
@@ -35,7 +33,9 @@ const handleSubmit = async () => {
 
   try {
     const data = await fetchData();
+
     if (data) {
+      clearPokemonData();
       setPokemonData(data);
       console.log('Fetched Pokémon Data:', data);
     }
@@ -52,13 +52,10 @@ const handleSubmit = async () => {
       if (!response.ok) {
         console.error('Failed to fetch data');
       }
+      await getEvolution();
       const data: PkmnState = await response.json();
       pkId.value = data.id;
       setPokemonData(data);
-
-      const evolutions = await extractForms();
-      console.log(evolutions);
-
       return (pokemon.value = data);
     } catch (error) {
       console.error('Failed to fetch Pokémon:', error);
@@ -73,30 +70,9 @@ async function getEvolution(): Promise<PkmnSpecies | undefined> {
       `https://pokeapi.co/api/v2/pokemon-species/${pkId.value}/`,
     );
     if (!response.ok) console.error(error);
-
     const data = await response.json();
+    dataEntry.value = data as PkmnSpecies;
     return data as PkmnSpecies;
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-async function extractForms() {
-  try {
-    const evoInfo = await getEvolution();
-    if (evoInfo) {
-      evoData.value = evoInfo?.evolution_chain.url;
-    }
-
-    const evoForms = await fetch(evoData.value as string);
-    if (!evoForms.ok) console.error(error);
-
-    const evolutionData: Evolutions = await evoForms.json();
-    const forms = {
-      firstForm: evolutionData.chain.evolves_to[0].species.name,
-      secondForm: evolutionData.chain.evolves_to[0].evolves_to[0].species.name,
-    };
-    return forms ? forms : console.log('There are no forms');
   } catch (e) {
     console.error(e);
   }
@@ -115,7 +91,7 @@ async function extractForms() {
           @input="(e) => updateValue((e.target as HTMLInputElement).value)"
         />
         <button @click="handleSubmit">
-          <Icon name="material-symbols:search" :style="{ fontSize: '36px' }" />
+          <Icon name="material-symbols:search" size="40" />
         </button>
       </div>
     </template>
@@ -128,7 +104,7 @@ async function extractForms() {
       <Image-portal v-if="pokemon" :pokemon="pokemon" />
       <InfoDisplay v-if="pokemon" :pokemon="pokemon" />
       <StatsDisplay v-if="pokemon" :pokemon="pokemon" />
-      <dataView v-if="pokemon" :evolutions="evolutions" />
+      <dataView :data-entry="dataEntry" />
       <movesList v-if="pokemon" :pokemon="pokemon" />
     </div>
   </el-card>

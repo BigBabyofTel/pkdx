@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import type { PkmnState } from '../utils/types';
 import { getLbs, getKgs, getFeet, getCm } from '../utils/utils';
-import { usePokemonStore } from '../composables/pokemonStore';
 import type { PropType } from 'vue';
 import { computed, ref } from 'vue';
 
-const { pokemonData } = usePokemonStore();
-
-defineProps({
+const pokemon = defineProps({
   pokemon: {
     type: Object as PropType<PkmnState>,
     required: true,
@@ -19,14 +16,14 @@ const value = ref<boolean>(false);
 // using computed properties react to value changes automatically
 const weight = computed(() =>
   value.value
-    ? getLbs(pokemonData.weight as number)
-    : getKgs(pokemonData.weight as number),
+    ? getLbs(pokemon.pokemon.weight as number)
+    : getKgs(pokemon.pokemon.weight as number),
 );
 
 const height = computed(() =>
   value.value
-    ? getFeet(pokemonData.height as number, getCm)
-    : getCm(pokemonData.height as number),
+    ? getFeet(pokemon.pokemon.height as number, getCm)
+    : getCm(pokemon.pokemon.height as number),
 );
 
 const heavy = computed(() => (value.value ? `lbs` : `Kgs`));
@@ -40,11 +37,14 @@ const tall = computed(() => (value.value ? `Feet` : `Cm`));
       <span> Weight: {{ weight }} {{ heavy }} </span>
       <span> Height: {{ height }} {{ tall }} </span>
       Ability:
-      <span v-for="ability in pokemon.abilities" :key="ability.ability.name">
+      <span
+        v-for="ability in pokemon.pokemon.abilities"
+        :key="ability.ability.name"
+      >
         {{ ability.ability.name }}
       </span>
       Type:
-      <span v-for="type in pokemon.types" :key="type.type.name">
+      <span v-for="type in pokemon.pokemon.types" :key="type.type.name">
         {{ type.type.name }}
       </span>
     </div>

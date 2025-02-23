@@ -60,8 +60,13 @@ export interface Evolutions {
   };
 }
 
+export interface EvoName {
+  firstForm: string | null;
+  secondForm: string | null;
+}
+
 export interface PkmnSpecies {
-  evolution_chain: {
-    url: string | null;
-  };
+  flavor_text_entries: Array<{
+    flavor_text: string | null;
+  } | null> | null;
 }
