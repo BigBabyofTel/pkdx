@@ -35,7 +35,6 @@ const handleSubmit = async () => {
     const data = await fetchData();
 
     if (data) {
-      clearPokemonData();
       setPokemonData(data);
       console.log('Fetched Pokémon Data:', data);
     }
@@ -93,6 +92,12 @@ async function getEvolution(): Promise<PkmnSpecies | undefined> {
         <button @click="handleSubmit">
           <Icon name="material-symbols:search" size="40" />
         </button>
+        <button>
+          <Icon name="material-symbols:arrow-circle-left" size="40" />
+        </button>
+        <button>
+          <Icon name="material-symbols:arrow-circle-right" size="40" />
+        </button>
       </div>
     </template>
 
@@ -104,7 +109,7 @@ async function getEvolution(): Promise<PkmnSpecies | undefined> {
       <Image-portal v-if="pokemon" :pokemon="pokemon" />
       <InfoDisplay v-if="pokemon" :pokemon="pokemon" />
       <StatsDisplay v-if="pokemon" :pokemon="pokemon" />
-      <dataView :data-entry="dataEntry" />
+      <dataView v-if="dataEntry" :data-entry="dataEntry" />
       <movesList v-if="pokemon" :pokemon="pokemon" />
     </div>
   </el-card>
