@@ -2,7 +2,7 @@
 import type { PkmnState } from '../utils/types';
 import { getLbs, getKgs, getFeet, getCm } from '../utils/utils';
 import type { PropType } from 'vue';
-import { computed, ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const pokemon = defineProps({
   pokemon: {
@@ -31,7 +31,7 @@ const tall = computed(() => (value.value ? `Feet` : `Cm`));
 </script>
 
 <template>
-  <el-card class="row-start-3 row-span-3 col-start-1 col-end-3">
+  <el-card class="row-start-3 row-span-3 col-start-1 col-end-3 backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
     <el-switch v-model="value" />
     <div class="flex flex-col">
       <span> Weight: {{ weight }} {{ heavy }} </span>

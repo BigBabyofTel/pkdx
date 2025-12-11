@@ -4,12 +4,12 @@ import { ref } from 'vue';
 import { usePokemonStore } from '../composables/pokemonStore';
 import { useDebounceFn } from '@vueuse/core';
 import InfoDisplay from './infoDisplay.vue';
-import ImagePortal from './imagePortal.vue';
 import StatsDisplay from './statsDisplay.vue';
+import ImagePortal from './imagePortal.vue';
 import DataView from './dataView.vue';
 import MovesList from './movesList.vue';
 
-const { setPokemonData, clearPokemonData } = usePokemonStore();
+const { setPokemonData } = usePokemonStore();
 
 const search = ref<string | number | null>();
 const isLoading = ref(false);
@@ -76,10 +76,24 @@ async function getEvolution(): Promise<PkmnSpecies | undefined> {
     console.error(e);
   }
 }
+
+const goToPrevious = () => {
+  if (pkId.value && pkId.value > 1) {
+    search.value = pkId.value - 1;
+    handleSubmit();
+  }
+};
+
+const goToNext = () => {
+  if (pkId.value) {
+    search.value = pkId.value + 1;
+    handleSubmit();
+  }
+};
 </script>
 
 <template>
-  <el-card shadow="hover" class="h-[95vh] w-full">
+  <el-card shadow="hover" class="h-[95vh] w-full backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
     <template #header>
       <div class="flex items-center">
         <input
@@ -88,14 +102,14 @@ async function getEvolution(): Promise<PkmnSpecies | undefined> {
           placeholder="Search Pokémon by name or ID..."
           class="p-3"
           @input="(e) => updateValue((e.target as HTMLInputElement).value)"
-        />
+        >
         <button @click="handleSubmit">
           <Icon name="material-symbols:search" size="40" />
         </button>
-        <button>
+        <button @click="goToPrevious">
           <Icon name="material-symbols:arrow-circle-left" size="40" />
         </button>
-        <button>
+        <button @click="goToNext">
           <Icon name="material-symbols:arrow-circle-right" size="40" />
         </button>
       </div>
@@ -104,13 +118,13 @@ async function getEvolution(): Promise<PkmnSpecies | undefined> {
     <div v-if="error" class="text-red-500">{{ error }}</div>
 
     <div
-      class="border h-[80vh] w-full p-5 bg-slate-300 grid grid-cols-7 grid-rows-4 gap-2"
+      class="border h-[80vh] w-full p-5 bg-gradient-to-br from-slate-600 to-slate-800 grid grid-cols-7 grid-rows-4 gap-2"
     >
-      <Image-portal v-if="pokemon" :pokemon="pokemon" />
+      <ImagePortal v-if="pokemon" :pokemon="pokemon" />
       <InfoDisplay v-if="pokemon" :pokemon="pokemon" />
       <StatsDisplay v-if="pokemon" :pokemon="pokemon" />
-      <dataView v-if="dataEntry" :data-entry="dataEntry" />
-      <movesList v-if="pokemon" :pokemon="pokemon" />
+      <DataView v-if="dataEntry" :data-entry="dataEntry" />
+      <MovesList v-if="pokemon" :pokemon="pokemon" />
     </div>
   </el-card>
 </template>

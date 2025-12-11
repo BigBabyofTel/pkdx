@@ -2,7 +2,6 @@
 import { computed, defineProps, ref } from 'vue';
 import type { PkmnState } from '../utils/types';
 import type { PropType } from 'vue';
-import Chart from 'primevue/chart';
 
 const pokemon = defineProps({
   pokemon: {
@@ -49,7 +48,7 @@ const setChartOptions = () => {
 </script>
 
 <template>
-  <el-card class="row-start-1 row-end-3 col-start-3 col-end-7">
+  <el-card class="row-start-1 row-end-3 col-start-3 col-end-7 backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
     <div>
       <Chart
         type="radar"
