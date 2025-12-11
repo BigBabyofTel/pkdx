@@ -48,7 +48,7 @@ const setChartOptions = () => {
 </script>
 
 <template>
-  <el-card class="row-start-1 row-end-3 col-start-3 col-end-7 backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
+  <el-card class="row-start-1 row-end-3 col-start-3 col-end-7 backdrop-blur-xl bg-slate-900/20 border border-cyan-400/40 shadow-2xl">
     <div>
       <Chart
         type="radar"

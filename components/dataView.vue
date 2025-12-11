@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-  <el-card class="row-span-3 col-start-3 col-end-7 backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
+  <el-card class="row-span-3 col-start-3 col-end-7 backdrop-blur-xl bg-slate-900/20 border border-cyan-400/40 shadow-2xl">
     <p v-for="type in dataEntry.flavor_text_entries" :key="type.flavor_text">
       {{ type.flavor_text }}
     </p>

@@ -51,31 +51,27 @@ const handleSubmit = async () => {
       if (!response.ok) {
         console.error('Failed to fetch data');
       }
-      await getEvolution();
       const data: PkmnState = await response.json();
       pkId.value = data.id;
       setPokemonData(data);
-      return (pokemon.value = data);
+      pokemon.value = data;
+
+      // Fetch species data in parallel
+      const speciesResponse = await fetch(
+        `https://pokeapi.co/api/v2/pokemon-species/${data.id}/`,
+      );
+      if (speciesResponse.ok) {
+        const speciesData = await speciesResponse.json();
+        dataEntry.value = speciesData as PkmnSpecies;
+      }
+
+      return pokemon.value;
     } catch (error) {
       console.error('Failed to fetch Pokémon:', error);
       throw error;
     }
   }
 };
-
-async function getEvolution(): Promise<PkmnSpecies | undefined> {
-  try {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${pkId.value}/`,
-    );
-    if (!response.ok) console.error(error);
-    const data = await response.json();
-    dataEntry.value = data as PkmnSpecies;
-    return data as PkmnSpecies;
-  } catch (e) {
-    console.error(e);
-  }
-}
 
 const goToPrevious = () => {
   if (pkId.value && pkId.value > 1) {
@@ -93,7 +89,7 @@ const goToNext = () => {
 </script>
 
 <template>
-  <el-card shadow="hover" class="h-[95vh] w-full backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
+  <el-card shadow="hover" class="h-[95vh] w-full">
     <template #header>
       <div class="flex items-center">
         <input
@@ -102,6 +98,7 @@ const goToNext = () => {
           placeholder="Search Pokémon by name or ID..."
           class="p-3"
           @input="(e) => updateValue((e.target as HTMLInputElement).value)"
+          @keydown.enter="handleSubmit"
         >
         <button @click="handleSubmit">
           <Icon name="material-symbols:search" size="40" />
@@ -115,10 +112,10 @@ const goToNext = () => {
       </div>
     </template>
 
-    <div v-if="error" class="text-red-500">{{ error }}</div>
+    <div v-if="error" class="text-slate-500">{{ error }}</div>
 
     <div
-      class="border h-[80vh] w-full p-5 bg-gradient-to-br from-slate-600 to-slate-800 grid grid-cols-7 grid-rows-4 gap-2"
+      class="border h-[80vh] w-full p-5 bg-red-600 grid grid-cols-7 grid-rows-4 gap-2"
     >
       <ImagePortal v-if="pokemon" :pokemon="pokemon" />
       <InfoDisplay v-if="pokemon" :pokemon="pokemon" />
