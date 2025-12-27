@@ -8,6 +8,7 @@
 ### Things to update
 - Add a filter option
 - Figure out design with AI
+- Check API for details about moves
 - Replace the element icon library with own svg icons
 - Add a dark mode
 - Dockerize
