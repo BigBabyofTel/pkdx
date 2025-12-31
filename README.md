@@ -13,3 +13,4 @@
 - Add a dark mode
 - Dockerize
 - explore backend options despite
+- add pictures for redesign
