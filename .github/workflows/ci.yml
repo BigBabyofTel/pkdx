@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, develop, AI_branch]
+    branches: [ main, develop, AI_branch ]
   pull_request:
-    branches: [main, develop]
+    branches: [ main, develop ]
 
 jobs:
   lint-and-format:
@@ -24,6 +24,9 @@ jobs:
       - name: Run ESLint
         run: bun run lint
 
+      - name: Type check
+        run: bun run nuxi typecheck
+
       - name: Check and fix code formatting
         run: bun run prettier --write .
 
@@ -33,12 +36,6 @@ jobs:
           commit_message: 'style: auto-format code with Prettier'
           commit_options: '--no-verify'
           file_pattern: '.'
-
-      - name: Check code formatting
-        run: bun run prettier --check .
-
-      - name: Type check
-        run: bun run typecheck
 
       - name: Run tests
         run: bun run test
@@ -58,4 +55,4 @@ jobs:
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
         with:
-          files: ./coverage/coverage-final.jsonge/coverage-final.json
+          files: ./coverage/coverage-final.json
