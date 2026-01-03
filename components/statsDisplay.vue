@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import type { PkmnState } from '../utils/types';
-import type { PropType } from 'vue';
+import { computed, type PropType, ref } from 'vue';
+import type { PkmnState, Stats } from '~/utils/types';
 
-defineProps({
+const pokemon = defineProps({
   pokemon: {
     type: Object as PropType<PkmnState>,
     required: true,
   },
 });
-
 const chartData = ref();
 const chartOptions = ref();
 
@@ -18,10 +16,10 @@ const chartOptionsReact = computed(() => setChartOptions());
 
 const setChartData = () => {
   return (chartData.value = {
-    labels: pokemon.pokemon.stats.map((stat) => stat.stat.name),
+    labels: pokemon.pokemon.stats.map((stat: Stats) => stat.stat.name),
     datasets: [
       {
-        data: pokemon.pokemon.stats.map((stat) => stat.base_stat),
+        data: pokemon.pokemon.stats.map((stat: Stats) => stat.base_stat),
         label: 'Base Stats',
         fill: true,
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
