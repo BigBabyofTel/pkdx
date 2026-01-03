@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, defineProps, ref } from 'vue';
+import { computed, ref } from 'vue';
 import type { PkmnState } from '../utils/types';
 import type { PropType } from 'vue';
 
-const pokemon = defineProps({
+defineProps({
   pokemon: {
     type: Object as PropType<PkmnState>,
     required: true,

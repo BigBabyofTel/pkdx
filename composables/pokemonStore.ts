@@ -22,7 +22,7 @@ export const usePokemonStore = defineStore('pkmn', () => {
       {
         slot: null,
         type: {
-          name: null,
+          name: string | null,
         },
       },
     ],
