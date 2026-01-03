@@ -16,8 +16,16 @@ interface MoveWithType {
   type: string;
 }
 
+const MAX_MOVES_TO_DISPLAY = 10;
+const FALLBACK_TYPE = 'normal';
+
 const movesWithTypes = ref<MoveWithType[]>([]);
 const isLoading = ref(false);
+
+// Format move name for display
+const formatMoveName = (name: string): string => {
+  return name.replace(/-/g, ' ');
+};
 
 // Validate that URL is from the expected Pokemon API domain
 const isValidPokemonApiUrl = (url: string): boolean => {
@@ -34,7 +42,7 @@ const fetchMoveTypes = async () => {
   if (!props.pokemon?.moves) return;
   
   isLoading.value = true;
-  const movePromises = props.pokemon.moves.slice(0, 10).map(async (move) => {
+  const movePromises = props.pokemon.moves.slice(0, MAX_MOVES_TO_DISPLAY).map(async (move) => {
     try {
       const url = move.move.url as string;
       
@@ -43,7 +51,7 @@ const fetchMoveTypes = async () => {
         console.error('Invalid Pokemon API URL:', url);
         return {
           name: move.move.name as string,
-          type: 'normal',
+          type: FALLBACK_TYPE,
         };
       }
 
@@ -52,7 +60,7 @@ const fetchMoveTypes = async () => {
         console.error('Failed to fetch move details:', response.statusText);
         return {
           name: move.move.name as string,
-          type: 'normal',
+          type: FALLBACK_TYPE,
         };
       }
 
@@ -65,7 +73,7 @@ const fetchMoveTypes = async () => {
       console.error('Failed to fetch move:', error);
       return {
         name: move.move.name as string,
-        type: 'normal',
+        type: FALLBACK_TYPE,
       };
     }
   });
@@ -90,7 +98,7 @@ watch(() => props.pokemon, fetchMoveTypes, { immediate: true });
         :key="move.name"
         class="flex items-center justify-between py-2"
       >
-        <span class="text-gray-800 text-sm font-medium capitalize">{{ move.name.replace('-', ' ') }}</span>
+        <span class="text-gray-800 text-sm font-medium capitalize">{{ formatMoveName(move.name) }}</span>
         <span
           :class="[
             getTypeColor(move.type),
