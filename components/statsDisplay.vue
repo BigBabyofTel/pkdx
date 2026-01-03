@@ -48,13 +48,13 @@ const setChartOptions = () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center">
-    <p class="text-xs text-gray-600 font-semibold mb-2">STATS RADAR</p>
+  <div class="flex flex-col items-center justify-center w-full">
     <Chart
       type="radar"
       :data="chartDataReact"
       :options="chartOptionsReact"
-      class="w-full max-w-xs"
+      class="w-full max-w-sm"
     />
+    <p class="text-xs text-gray-500 font-medium mt-2 uppercase tracking-wider">Stats Radar</p>
   </div>
 </template>

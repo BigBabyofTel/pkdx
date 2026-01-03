@@ -37,15 +37,14 @@ const tall = computed(() => (value.value ? `ft` : `cm`));
       <el-switch v-model="value" />
     </div>
 
-    <!-- Height and Weight -->
-    <div class="bg-gray-100 rounded-lg p-3 text-center">
-      <div class="text-xs text-gray-600 mb-1">Height</div>
-      <div class="text-lg font-bold text-gray-800">{{ height }}{{ tall }}</div>
-    </div>
-
-    <div class="bg-gray-100 rounded-lg p-3 text-center">
-      <div class="text-xs text-gray-600 mb-1">Weight</div>
-      <div class="text-lg font-bold text-gray-800">{{ weight }}{{ heavy }}</div>
+    <!-- Height and Weight Side by Side -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="text-center">
+        <div class="text-sm text-gray-600 mb-1 font-medium">Height: {{ height }}{{ tall }}</div>
+      </div>
+      <div class="text-center">
+        <div class="text-sm text-gray-600 mb-1 font-medium">Weight: {{ weight }}{{ heavy }}</div>
+      </div>
     </div>
   </div>
 </template>
