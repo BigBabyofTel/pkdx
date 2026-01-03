@@ -46,7 +46,7 @@ defineProps({
             'text-white text-xs font-bold px-4 py-1.5 rounded-full capitalize',
           ]"
         >
-          {{ type.type.name ?? 'unknown' }}
+          {{ type?.type?.name ?? 'unknown' }}
         </span>
       </div>
     </div>
