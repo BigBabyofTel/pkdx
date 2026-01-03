@@ -28,7 +28,7 @@ export interface PkmnState {
     {
       slot: number | null;
       type: {
-        name: string;
+        name: string | null;
       };
     },
   ];
