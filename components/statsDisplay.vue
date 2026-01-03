@@ -5,8 +5,8 @@ import type { PropType } from 'vue';
 
 const pokemon = defineProps({
   pokemon: {
-    type: Object as PropType<PkmnState>, // Use PropType for complex types
-    required: true, // This prop is required
+    type: Object as PropType<PkmnState>,
+    required: true,
   },
 });
 
@@ -48,14 +48,13 @@ const setChartOptions = () => {
 </script>
 
 <template>
-  <el-card class="row-start-1 row-end-3 col-start-3 col-end-7 backdrop-blur-xl bg-slate-900/20 border border-cyan-400/40 shadow-2xl">
-    <div>
-      <Chart
-        type="radar"
-        :data="chartDataReact"
-        :options="chartOptionsReact"
-        class="w-fit"
-      />
-    </div>
-  </el-card>
+  <div class="flex flex-col items-center justify-center">
+    <p class="text-xs text-gray-600 font-semibold mb-2">STATS RADAR</p>
+    <Chart
+      type="radar"
+      :data="chartDataReact"
+      :options="chartOptionsReact"
+      class="w-full max-w-xs"
+    />
+  </div>
 </template>

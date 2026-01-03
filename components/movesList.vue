@@ -2,24 +2,29 @@
 import type { PropType } from 'vue';
 import type { PkmnState } from '../utils/types';
 
+
 defineProps({
   pokemon: {
-    type: Object as PropType<PkmnState>, // Use PropType for complex types
-    required: true, // This prop is required
+    type: Object as PropType<PkmnState>,
+    required: true,
   },
 });
 </script>
 
 <template>
-  <el-scrollbar
-    class="row-start-1 row-span-5 col-start-7 col-end-8 h-full w-full overflow-y-auto"
-  >
-    <el-card class="backdrop-blur-xl bg-slate-900/20 border border-cyan-400/40 shadow-2xl">
-      <ul>
-        <li v-for="move in pokemon.moves" :key="move.move.name">
-          {{ move.move.name }}
-        </li>
-      </ul>
-    </el-card>
-  </el-scrollbar>
+  <div class="w-full max-w-2xl bg-white px-4 py-4 mx-auto border-t">
+    <h3 class="text-lg font-bold text-gray-800 mb-3">Moves</h3>
+    <div class="space-y-2 max-h-64 overflow-y-auto">
+      <div
+        v-for="move in pokemon.moves.slice(0, 10)"
+        :key="move.move.name"
+        class="flex items-center justify-between p-2 bg-gray-50 rounded hover:bg-gray-100"
+      >
+        <span class="text-gray-800 text-sm font-medium">{{ move.move.name }}</span>
+      </div>
+      <div v-if="pokemon.moves.length > 10" class="text-xs text-gray-500 text-center py-2">
+        Showing 10 of {{ pokemon.moves.length }} moves
+      </div>
+    </div>
+  </div>
 </template>

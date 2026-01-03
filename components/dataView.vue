@@ -11,9 +11,10 @@ defineProps({
 </script>
 
 <template>
-  <el-card class="row-span-3 col-start-3 col-end-7 backdrop-blur-xl bg-slate-900/20 border border-cyan-400/40 shadow-2xl flex items-center justify-center">
-    <p class="text-3xl text-center">
+  <div class="w-full max-w-2xl bg-white px-4 py-4 mx-auto">
+    <h3 class="text-lg font-bold text-gray-800 mb-3">Pokedex Entry</h3>
+    <p class="text-gray-700 text-sm leading-relaxed">
       {{ dataEntry?.flavor_text_entries?.[1]?.flavor_text || 'No description available' }}
     </p>
-  </el-card>
+  </div>
 </template>

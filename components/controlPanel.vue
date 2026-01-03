@@ -80,48 +80,65 @@ const goToPrevious = () => {
   }
 };
 
-const goToNext = () => {
-  if (pkId.value) {
-    search.value = pkId.value + 1;
-    handleSubmit();
-  }
-};
+// ...existing code...
 </script>
 
 <template>
-  <el-card shadow="hover" class="h-[95vh] w-full">
-    <template #header>
-      <div class="flex items-center">
-        <input
-          :value="search"
-          type="text"
-          placeholder="Search Pokémon by name or ID..."
-          class="p-3"
-          @input="(e) => updateValue((e.target as HTMLInputElement).value)"
-          @keydown.enter="handleSubmit"
-        >
-        <button @click="handleSubmit">
-          <Icon name="material-symbols:search" size="40" />
+  <div class="w-full h-screen flex flex-col bg-white">
+    <!-- Header with navigation and search controls -->
+    <div class="bg-red-500 text-white px-4 py-3 flex items-center justify-between">
+      <button class="flex items-center gap-1 hover:opacity-80" @click="goToPrevious">
+        <Icon name="material-symbols:arrow-back" size="20" />
+        <span class="text-sm">Back</span>
+      </button>
+      <div class="flex items-center gap-3">
+        <button class="hover:opacity-80" @click="handleSubmit">
+          <Icon name="material-symbols:search" size="20" />
         </button>
-        <button @click="goToPrevious">
-          <Icon name="material-symbols:arrow-circle-left" size="40" />
-        </button>
-        <button @click="goToNext">
-          <Icon name="material-symbols:arrow-circle-right" size="40" />
+        <button class="hover:opacity-80">
+          <Icon name="material-symbols:tune" size="20" />
         </button>
       </div>
-    </template>
-
-    <div v-if="error" class="text-slate-500">{{ error }}</div>
-
-    <div
-      class="border h-[80vh] w-full p-5 bg-red-600 grid grid-cols-7 grid-rows-4 gap-2"
-    >
-      <ImagePortal v-if="pokemon" :pokemon="pokemon" />
-      <InfoDisplay v-if="pokemon" :pokemon="pokemon" />
-      <StatsDisplay v-if="pokemon" :pokemon="pokemon" />
-      <DataView v-if="dataEntry" :data-entry="dataEntry" />
-      <MovesList v-if="pokemon" :pokemon="pokemon" />
     </div>
-  </el-card>
+
+    <!-- Error message -->
+    <div v-if="error" class="bg-red-100 text-red-700 px-4 py-2 text-center">
+      {{ error }}
+    </div>
+
+    <!-- Search bar (hidden but functional) -->
+    <input
+      :value="search"
+      type="text"
+      placeholder="Search Pokémon by name or ID..."
+      class="hidden"
+      @input="(e) => updateValue((e.target as HTMLInputElement).value)"
+      @keydown.enter="handleSubmit"
+    >
+
+    <!-- Main content area -->
+    <div class="flex-1 overflow-y-auto bg-gradient-to-b from-red-500 to-white">
+      <div class="flex flex-col items-center">
+        <!-- Image Section -->
+        <ImagePortal v-if="pokemon" :pokemon="pokemon" />
+
+        <!-- Info and Stats Section (side by side) -->
+        <div v-if="pokemon" class="w-full bg-white">
+          <div class="max-w-2xl mx-auto grid grid-cols-2 gap-4 px-4 py-4">
+            <!-- Info Display (Height, Weight) -->
+            <InfoDisplay :pokemon="pokemon" />
+
+            <!-- Stats Radar -->
+            <StatsDisplay :pokemon="pokemon" />
+          </div>
+        </div>
+
+        <!-- Pokedex Entry Section -->
+        <DataView v-if="dataEntry" :data-entry="dataEntry" />
+
+        <!-- Moves List Section -->
+        <MovesList v-if="pokemon" :pokemon="pokemon" />
+      </div>
+    </div>
+  </div>
 </template>
