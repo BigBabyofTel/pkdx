@@ -84,12 +84,13 @@ const goToPrevious = () => {
 </script>
 
 <template>
-
   <div class="w-full h-screen flex flex-col bg-white">
-
     <!-- Header with navigation and search controls -->
-    <div class="bg-red-500  px-4 py-3 flex items-center justify-between">
-      <button class="flex items-center text-white gap-1 hover:opacity-80" @click="goToPrevious">
+    <div class="bg-red-500 px-4 py-3 flex items-center justify-between">
+      <button
+        class="flex items-center text-white gap-1 hover:opacity-80"
+        @click="goToPrevious"
+      >
         <Icon name="material-symbols:arrow-back" size="20" />
         <span class="text-sm">Back</span>
       </button>
@@ -101,7 +102,7 @@ const goToPrevious = () => {
         class="rounded-2xl p-2 text-sm"
         @input="(e) => updateValue((e.target as HTMLInputElement).value)"
         @keydown.enter="handleSubmit"
-      >
+      />
       <div class="flex items-center gap-2 text-white">
         <button class="hover:opacity-80" @click="handleSubmit">
           <Icon name="material-symbols:search" size="20" />
@@ -110,10 +111,7 @@ const goToPrevious = () => {
           <Icon name="material-symbols:tune" size="20" />
         </button>
       </div>
-
     </div>
-
-
 
     <!-- Error message -->
     <div v-if="error" class="bg-red-100 text-red-700 px-4 py-2 text-center">

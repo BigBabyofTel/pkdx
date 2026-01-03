@@ -33,17 +33,23 @@ const tall = computed(() => (value.value ? `ft` : `cm`));
   <div class="flex flex-col gap-3">
     <!-- Unit Toggle -->
     <div class="flex items-center justify-center gap-2">
-      <span class="text-xs text-gray-600">{{ value ? 'Imperial' : 'Metric' }}</span>
+      <span class="text-xs text-gray-600">{{
+        value ? 'Imperial' : 'Metric'
+      }}</span>
       <el-switch v-model="value" />
     </div>
 
     <!-- Height and Weight Side by Side -->
     <div class="grid grid-cols-2 gap-4">
       <div class="text-center">
-        <div class="text-sm text-gray-600 mb-1 font-medium">Height: {{ height }}{{ tall }}</div>
+        <div class="text-sm text-gray-600 mb-1 font-medium">
+          Height: {{ height }}{{ tall }}
+        </div>
       </div>
       <div class="text-center">
-        <div class="text-sm text-gray-600 mb-1 font-medium">Weight: {{ weight }}{{ heavy }}</div>
+        <div class="text-sm text-gray-600 mb-1 font-medium">
+          Weight: {{ weight }}{{ heavy }}
+        </div>
       </div>
     </div>
   </div>
