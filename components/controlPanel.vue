@@ -84,22 +84,36 @@ const goToPrevious = () => {
 </script>
 
 <template>
+
   <div class="w-full h-screen flex flex-col bg-white">
+
     <!-- Header with navigation and search controls -->
-    <div class="bg-red-500 text-white px-4 py-3 flex items-center justify-between">
-      <button class="flex items-center gap-1 hover:opacity-80" @click="goToPrevious">
+    <div class="bg-red-500  px-4 py-3 flex items-center justify-between">
+      <button class="flex items-center text-white gap-1 hover:opacity-80" @click="goToPrevious">
         <Icon name="material-symbols:arrow-back" size="20" />
         <span class="text-sm">Back</span>
       </button>
-      <div class="flex items-center gap-3">
+
+      <input
+        :value="search"
+        type="text"
+        placeholder="Search Pokémon by name or ID"
+        class="rounded-2xl p-2 text-sm"
+        @input="(e) => updateValue((e.target as HTMLInputElement).value)"
+        @keydown.enter="handleSubmit"
+      >
+      <div class="flex items-center gap-2 text-white">
         <button class="hover:opacity-80" @click="handleSubmit">
           <Icon name="material-symbols:search" size="20" />
         </button>
-        <button class="hover:opacity-80">
+        <button class="hover:opacity-80 text-white">
           <Icon name="material-symbols:tune" size="20" />
         </button>
       </div>
+
     </div>
+
+
 
     <!-- Error message -->
     <div v-if="error" class="bg-red-100 text-red-700 px-4 py-2 text-center">
@@ -107,14 +121,6 @@ const goToPrevious = () => {
     </div>
 
     <!-- Search bar (hidden but functional) -->
-    <input
-      :value="search"
-      type="text"
-      placeholder="Search Pokémon by name or ID..."
-      class="hidden"
-      @input="(e) => updateValue((e.target as HTMLInputElement).value)"
-      @keydown.enter="handleSubmit"
-    >
 
     <!-- Main content area -->
     <div class="flex-1 overflow-y-auto bg-white">
