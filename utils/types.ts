@@ -24,14 +24,12 @@ export interface PkmnState {
       url: string;
     };
   }[];
-  types: [
-    {
-      slot: number | null;
-      type: {
-        name: string | null;
-      };
-    },
-  ];
+  types: {
+    slot: number | null;
+    type: {
+      name: string | null;
+    };
+  }[];
   weight: number | null;
   moves: {
     move: {
