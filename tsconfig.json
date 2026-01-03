@@ -1,7 +1,7 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
   "compilerOptions": {
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "target": "es2020",
     "module": "esnext",
     "esModuleInterop": true,

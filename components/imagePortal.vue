@@ -22,7 +22,7 @@ defineProps({
         :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id as number}.png`"
         :alt="`Pokemon #${pokemon.id}`"
         class="w-64 h-64 object-contain relative z-10"
-      />
+      >
       <!-- Curved white overlay -->
       <div
         class="absolute bottom-0 left-0 right-0 h-12 bg-white rounded-t-[3rem]"

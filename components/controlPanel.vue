@@ -102,7 +102,7 @@ const goToPrevious = () => {
         class="rounded-2xl p-2 text-sm"
         @input="(e) => updateValue((e.target as HTMLInputElement).value)"
         @keydown.enter="handleSubmit"
-      />
+      >
       <div class="flex items-center gap-2 text-white">
         <button class="hover:opacity-80" @click="handleSubmit">
           <Icon name="material-symbols:search" size="20" />
