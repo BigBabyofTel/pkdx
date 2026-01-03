@@ -1,6 +1,5 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es2020",
@@ -13,5 +12,16 @@
     "types": ["element-plus/global"],
     "verbatimModuleSyntax": false
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "extends": "./.nuxt/tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "**/*.d.ts",
+    "**/*.tsx",
+    "**/*.vue"
+  ],
+  "exclude": [
+    ".nuxt",
+    "dist",
+    "node_modules"
+  ]
 }
