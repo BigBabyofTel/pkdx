@@ -117,20 +117,19 @@ const goToPrevious = () => {
     >
 
     <!-- Main content area -->
-    <div class="flex-1 overflow-y-auto bg-gradient-to-b from-red-500 to-white">
-      <div class="flex flex-col items-center">
+    <div class="flex-1 overflow-y-auto bg-white">
+      <div class="flex flex-col">
         <!-- Image Section -->
         <ImagePortal v-if="pokemon" :pokemon="pokemon" />
 
-        <!-- Info and Stats Section (side by side) -->
-        <div v-if="pokemon" class="w-full bg-white">
-          <div class="max-w-2xl mx-auto grid grid-cols-2 gap-4 px-4 py-4">
-            <!-- Info Display (Height, Weight) -->
-            <InfoDisplay :pokemon="pokemon" />
+        <!-- Info Display (Height, Weight) - Full Width -->
+        <div v-if="pokemon" class="w-full bg-white px-4 py-4">
+          <InfoDisplay :pokemon="pokemon" />
+        </div>
 
-            <!-- Stats Radar -->
-            <StatsDisplay :pokemon="pokemon" />
-          </div>
+        <!-- Stats Radar - Full Width -->
+        <div v-if="pokemon" class="w-full bg-white px-4 py-4">
+          <StatsDisplay :pokemon="pokemon" />
         </div>
 
         <!-- Pokedex Entry Section -->

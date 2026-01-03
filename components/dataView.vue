@@ -11,8 +11,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="w-full max-w-2xl bg-white px-4 py-4 mx-auto">
-    <h3 class="text-lg font-bold text-gray-800 mb-3">Pokedex Entry</h3>
+  <div class="w-full bg-gray-50 px-6 py-6">
+    <h3 class="text-base font-bold text-gray-900 mb-3">Pokedex Entry</h3>
     <p class="text-gray-700 text-sm leading-relaxed">
       {{ dataEntry?.flavor_text_entries?.[1]?.flavor_text || 'No description available' }}
     </p>
