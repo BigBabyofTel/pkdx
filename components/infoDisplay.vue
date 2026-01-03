@@ -13,7 +13,6 @@ const pokemon = defineProps({
 
 const value = ref<boolean>(false);
 
-// using computed properties react to value changes automatically
 const weight = computed(() =>
   value.value
     ? getLbs(pokemon.pokemon.weight as number)
@@ -26,27 +25,26 @@ const height = computed(() =>
     : getCm(pokemon.pokemon.height as number),
 );
 
-const heavy = computed(() => (value.value ? `lbs` : `Kgs`));
-const tall = computed(() => (value.value ? `Feet` : `Cm`));
+const heavy = computed(() => (value.value ? `lbs` : `kg`));
+const tall = computed(() => (value.value ? `ft` : `cm`));
 </script>
 
 <template>
-  <el-card class="row-start-3 row-span-3 col-start-1 col-end-3 backdrop-blur-xl bg-slate-900/20 border border-cyan-400/40 shadow-2xl">
-    <el-switch v-model="value" />
-    <div class="flex flex-col">
-      <span> Weight: {{ weight }} {{ heavy }} </span>
-      <span> Height: {{ height }} {{ tall }} </span>
-      Ability:
-      <span
-        v-for="ability in pokemon.pokemon.abilities"
-        :key="ability.ability.name"
-      >
-        {{ ability.ability.name }}
-      </span>
-      Type:
-      <span v-for="type in pokemon.pokemon.types" :key="type.type.name">
-        {{ type.type.name }}
-      </span>
+  <div class="flex flex-col gap-3">
+    <!-- Unit Toggle -->
+    <div class="flex items-center justify-center gap-2">
+      <span class="text-xs text-gray-600">{{ value ? 'Imperial' : 'Metric' }}</span>
+      <el-switch v-model="value" />
     </div>
-  </el-card>
+
+    <!-- Height and Weight Side by Side -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="text-center">
+        <div class="text-sm text-gray-600 mb-1 font-medium">Height: {{ height }}{{ tall }}</div>
+      </div>
+      <div class="text-center">
+        <div class="text-sm text-gray-600 mb-1 font-medium">Weight: {{ weight }}{{ heavy }}</div>
+      </div>
+    </div>
+  </div>
 </template>
