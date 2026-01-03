@@ -5,7 +5,9 @@
 ## Pokedex project - considered Version 3.0
 
 ## Version 4 is in development
+
 ### Things to update
+
 - Add a filter option
 - Figure out design with AI
 - Check API for details about moves

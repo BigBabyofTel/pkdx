@@ -55,6 +55,8 @@ const setChartOptions = () => {
       :options="chartOptionsReact"
       class="w-full max-w-sm"
     />
-    <p class="text-xs text-gray-500 font-medium mt-2 uppercase tracking-wider">Stats Radar</p>
+    <p class="text-xs text-gray-500 font-medium mt-2 uppercase tracking-wider">
+      Stats Radar
+    </p>
   </div>
 </template>

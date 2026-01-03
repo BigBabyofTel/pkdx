@@ -40,43 +40,45 @@ const isValidPokemonApiUrl = (url: string): boolean => {
 // Fetch move details to get type information
 const fetchMoveTypes = async () => {
   if (!props.pokemon?.moves) return;
-  
+
   isLoading.value = true;
-  const movePromises = props.pokemon.moves.slice(0, MAX_MOVES_TO_DISPLAY).map(async (move) => {
-    try {
-      const url = move.move.url as string;
-      
-      // Validate URL before making request
-      if (!isValidPokemonApiUrl(url)) {
-        console.error('Invalid Pokemon API URL:', url);
+  const movePromises = props.pokemon.moves
+    .slice(0, MAX_MOVES_TO_DISPLAY)
+    .map(async (move) => {
+      try {
+        const url = move.move.url as string;
+
+        // Validate URL before making request
+        if (!isValidPokemonApiUrl(url)) {
+          console.error('Invalid Pokemon API URL:', url);
+          return {
+            name: move.move.name as string,
+            type: FALLBACK_TYPE,
+          };
+        }
+
+        const response = await fetch(url);
+        if (!response.ok) {
+          console.error('Failed to fetch move details:', response.statusText);
+          return {
+            name: move.move.name as string,
+            type: FALLBACK_TYPE,
+          };
+        }
+
+        const data = await response.json();
+        return {
+          name: move.move.name as string,
+          type: data.type.name,
+        };
+      } catch (error) {
+        console.error('Failed to fetch move:', error);
         return {
           name: move.move.name as string,
           type: FALLBACK_TYPE,
         };
       }
-
-      const response = await fetch(url);
-      if (!response.ok) {
-        console.error('Failed to fetch move details:', response.statusText);
-        return {
-          name: move.move.name as string,
-          type: FALLBACK_TYPE,
-        };
-      }
-
-      const data = await response.json();
-      return {
-        name: move.move.name as string,
-        type: data.type.name,
-      };
-    } catch (error) {
-      console.error('Failed to fetch move:', error);
-      return {
-        name: move.move.name as string,
-        type: FALLBACK_TYPE,
-      };
-    }
-  });
+    });
 
   movesWithTypes.value = await Promise.all(movePromises);
   isLoading.value = false;
@@ -98,11 +100,13 @@ watch(() => props.pokemon, fetchMoveTypes, { immediate: true });
         :key="move.name"
         class="flex items-center justify-between py-2"
       >
-        <span class="text-gray-800 text-sm font-medium capitalize">{{ formatMoveName(move.name) }}</span>
+        <span class="text-gray-800 text-sm font-medium capitalize">{{
+          formatMoveName(move.name)
+        }}</span>
         <span
           :class="[
             getTypeColor(move.type),
-            'text-white text-xs font-bold px-3 py-1 rounded-full capitalize'
+            'text-white text-xs font-bold px-3 py-1 rounded-full capitalize',
           ]"
         >
           {{ move.type }}
