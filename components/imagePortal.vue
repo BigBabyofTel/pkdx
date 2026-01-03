@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import type { PkmnState } from '../utils/types';
-import { getCapital } from '../utils/utils';
-import { getTypeColor } from '../utils/typeColors';
+import type { PkmnState } from '~/utils/types';
+import { getCapital } from '~/utils/utils';
+import { getTypeColor } from '~/utils/typeColors';
 
 defineProps({
   pokemon: {
@@ -40,13 +40,13 @@ defineProps({
       <div class="flex gap-2 mt-3">
         <span
           v-for="type in pokemon.types"
-          :key="type.type.name"
+          :key="type.type.name ?? 'unknown'"
           :class="[
-            getTypeColor(type.type.name),
+            getTypeColor(type.type.name ?? 'normal'),
             'text-white text-xs font-bold px-4 py-1.5 rounded-full capitalize',
           ]"
         >
-          {{ type.type.name }}
+          {{ type.type.name ?? 'unknown' }}
         </span>
       </div>
     </div>

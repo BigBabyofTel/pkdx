@@ -70,3 +70,12 @@ export interface PkmnSpecies {
     flavor_text: string | null;
   } | null> | null;
 }
+
+export interface Stats {
+  stat: {
+    name: string;
+    url: string;
+  };
+  base_stat: number;
+  effort: number;
+}

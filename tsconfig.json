@@ -13,15 +13,6 @@
     "verbatimModuleSyntax": false
   },
   "extends": "./.nuxt/tsconfig.json",
-  "include": [
-    "**/*.ts",
-    "**/*.d.ts",
-    "**/*.tsx",
-    "**/*.vue"
-  ],
-  "exclude": [
-    ".nuxt",
-    "dist",
-    "node_modules"
-  ]
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx", "**/*.vue"],
+  "exclude": [".nuxt", "dist", "node_modules"]
 }
