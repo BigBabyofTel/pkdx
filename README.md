@@ -15,5 +15,5 @@
 - Add a dark mode
 - Dockerize
 - explore backend options despite
-- add pictures for redesign
+- work on tablet view
 - workflow has been added
