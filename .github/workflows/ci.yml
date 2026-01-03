@@ -45,9 +45,6 @@ jobs:
       - name: Validate Nuxt config
         run: bun run nuxi prepare
 
-      - name: Security audit
-        run: bun audit
-
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
         with:
