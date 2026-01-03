@@ -2,6 +2,7 @@
 import type { PropType } from 'vue';
 import type { PkmnState } from '../utils/types';
 import { getCapital } from '../utils/utils';
+import { getTypeColor } from '../utils/typeColors';
 
 defineProps({
   pokemon: {
@@ -9,30 +10,6 @@ defineProps({
     required: true,
   },
 });
-
-// Type color mapping
-const typeColors: Record<string, string> = {
-  normal: 'bg-gray-400',
-  fire: 'bg-red-500',
-  water: 'bg-blue-500',
-  grass: 'bg-green-500',
-  electric: 'bg-yellow-400',
-  ice: 'bg-cyan-400',
-  fighting: 'bg-red-700',
-  poison: 'bg-purple-500',
-  ground: 'bg-yellow-600',
-  flying: 'bg-blue-400',
-  psychic: 'bg-purple-600',
-  bug: 'bg-green-600',
-  rock: 'bg-gray-600',
-  ghost: 'bg-purple-700',
-  dragon: 'bg-purple-800',
-  dark: 'bg-gray-800',
-  steel: 'bg-gray-500',
-  fairy: 'bg-pink-500',
-};
-
-const getTypeColor = (typeName: string) => typeColors[typeName] || 'bg-gray-400';
 </script>
 
 <template>

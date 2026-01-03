@@ -2,6 +2,7 @@
 import type { PropType } from 'vue';
 import type { PkmnState } from '../utils/types';
 import { ref, watch } from 'vue';
+import { getTypeColor } from '../utils/typeColors';
 
 const props = defineProps({
   pokemon: {
@@ -9,30 +10,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-// Type color mapping (same as imagePortal)
-const typeColors: Record<string, string> = {
-  normal: 'bg-gray-400',
-  fire: 'bg-red-500',
-  water: 'bg-blue-500',
-  grass: 'bg-green-500',
-  electric: 'bg-yellow-400',
-  ice: 'bg-cyan-400',
-  fighting: 'bg-red-700',
-  poison: 'bg-purple-500',
-  ground: 'bg-yellow-600',
-  flying: 'bg-blue-400',
-  psychic: 'bg-purple-600',
-  bug: 'bg-green-600',
-  rock: 'bg-gray-600',
-  ghost: 'bg-purple-700',
-  dragon: 'bg-purple-800',
-  dark: 'bg-gray-800',
-  steel: 'bg-gray-500',
-  fairy: 'bg-pink-500',
-};
-
-const getTypeColor = (typeName: string) => typeColors[typeName] || 'bg-gray-400';
 
 interface MoveWithType {
   name: string;
@@ -42,6 +19,16 @@ interface MoveWithType {
 const movesWithTypes = ref<MoveWithType[]>([]);
 const isLoading = ref(false);
 
+// Validate that URL is from the expected Pokemon API domain
+const isValidPokemonApiUrl = (url: string): boolean => {
+  try {
+    const parsedUrl = new URL(url);
+    return parsedUrl.hostname === 'pokeapi.co';
+  } catch {
+    return false;
+  }
+};
+
 // Fetch move details to get type information
 const fetchMoveTypes = async () => {
   if (!props.pokemon?.moves) return;
@@ -49,21 +36,38 @@ const fetchMoveTypes = async () => {
   isLoading.value = true;
   const movePromises = props.pokemon.moves.slice(0, 10).map(async (move) => {
     try {
-      const response = await fetch(move.move.url as string);
-      if (response.ok) {
-        const data = await response.json();
+      const url = move.move.url as string;
+      
+      // Validate URL before making request
+      if (!isValidPokemonApiUrl(url)) {
+        console.error('Invalid Pokemon API URL:', url);
         return {
           name: move.move.name as string,
-          type: data.type.name,
+          type: 'normal',
         };
       }
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.error('Failed to fetch move details:', response.statusText);
+        return {
+          name: move.move.name as string,
+          type: 'normal',
+        };
+      }
+
+      const data = await response.json();
+      return {
+        name: move.move.name as string,
+        type: data.type.name,
+      };
     } catch (error) {
       console.error('Failed to fetch move:', error);
+      return {
+        name: move.move.name as string,
+        type: 'normal',
+      };
     }
-    return {
-      name: move.move.name as string,
-      type: 'normal', // fallback
-    };
   });
 
   movesWithTypes.value = await Promise.all(movePromises);
