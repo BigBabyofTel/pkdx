@@ -11,8 +11,7 @@
 - Add a filter option
 - Figure out design with AI
 - Check API for details about moves
-- Replace the element icon library with own svg icons
-- Add a dark mode
+- Replace the element icon library with own svg iconsd
 - Dockerize
 - explore backend options despite
 - work on tablet view
