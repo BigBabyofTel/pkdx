@@ -10,8 +10,8 @@
 
 - Add a filter option
 - Figure out design with AI
-- Check API for details about moves
-- Replace the element icon library with own svg iconsd
+- Add details for pokemon moves
+- Replace the element icon library with own svg icons
 - Dockerize
 - explore backend options despite
 - work on tablet view
