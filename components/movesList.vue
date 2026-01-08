@@ -16,7 +16,7 @@ interface MoveWithType {
   type: string;
 }
 
-const MAX_MOVES_TO_DISPLAY = 10;
+const MAX_MOVES_TO_DISPLAY = 25;
 const FALLBACK_TYPE = 'normal';
 
 const movesWithTypes = ref<MoveWithType[]>([]);
