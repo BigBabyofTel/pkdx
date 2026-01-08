@@ -51,7 +51,7 @@ const setChartOptions = () => {
       type="radar"
       :data="chartDataReact"
       :options="chartOptionsReact"
-      class="w-full max-w-sm md:max-w-md lg:max-w-sm"
+      class="w-full max-w-sm md:max-w-sm lg:max-w-sm"
     />
     <p class="text-xs text-gray-500 font-medium mt-2 uppercase tracking-wider">
       Stats Radar

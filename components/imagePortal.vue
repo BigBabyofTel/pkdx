@@ -2,26 +2,47 @@
 import type { PropType } from 'vue';
 import type { PkmnState } from '~/utils/types';
 import { getCapital } from '~/utils/utils';
-import { getTypeColor } from '~/utils/typeColors';
+import { getTypeColor, getTypeColorValue } from '~/utils/typeColors';
+import { computed } from 'vue';
 
-defineProps({
+const props = defineProps({
   pokemon: {
     type: Object as PropType<PkmnState>,
     required: true,
   },
 });
+
+// Compute background style based on Pokemon types
+const backgroundStyle = computed(() => {
+  const types = props.pokemon.types;
+  if (!types || types.length === 0) {
+    return 'background: linear-gradient(to bottom, #ef4444, #f87171)'; // Default red
+  }
+  
+  const firstTypeColor = getTypeColorValue(types[0]?.type?.name || 'normal');
+  
+  if (types.length === 1) {
+    // Single type: use gradient with lighter shade
+    return `background: linear-gradient(to bottom, ${firstTypeColor}, ${firstTypeColor}dd)`;
+  } else {
+    // Dual type: gradient between both colors
+    const secondTypeColor = getTypeColorValue(types[1]?.type?.name || 'normal');
+    return `background: linear-gradient(135deg, ${firstTypeColor}, ${secondTypeColor})`;
+  }
+});
 </script>
 
 <template>
   <div class="w-full">
-    <!-- Red background with Pokemon Image -->
+    <!-- Dynamic background with Pokemon Image -->
     <div
-      class="w-full bg-gradient-to-b from-red-500 to-red-400 pt-8 md:pt-6 lg:pt-12 pb-16 md:pb-12 lg:pb-20 flex justify-center relative"
+      :style="backgroundStyle"
+      class="w-full pt-8 md:pt-6 lg:pt-12 pb-16 md:pb-12 lg:pb-20 flex justify-center relative"
     >
       <img
         :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id as number}.png`"
         :alt="`Pokemon #${pokemon.id}`"
-        class="w-64 h-64 md:w-60 md:h-60 lg:w-72 lg:h-72 object-contain relative z-10 transition-all"
+        class="w-64 h-64 md:w-80 md:h-80 lg:w-72 lg:h-72 object-contain relative z-10 transition-all"
       >
       <!-- Curved white overlay -->
       <div

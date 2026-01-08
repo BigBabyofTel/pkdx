@@ -20,6 +20,32 @@ export const typeColors: Record<string, string> = {
   fairy: 'bg-pink-500',
 };
 
+// Raw color values for gradient backgrounds
+export const typeColorValues: Record<string, string> = {
+  normal: '#9ca3af',
+  fire: '#ef4444',
+  water: '#3b82f6',
+  grass: '#22c55e',
+  electric: '#facc15',
+  ice: '#22d3ee',
+  fighting: '#b91c1c',
+  poison: '#a855f7',
+  ground: '#ca8a04',
+  flying: '#60a5fa',
+  psychic: '#9333ea',
+  bug: '#16a34a',
+  rock: '#4b5563',
+  ghost: '#7e22ce',
+  dragon: '#6b21a8',
+  dark: '#1f2937',
+  steel: '#6b7280',
+  fairy: '#ec4899',
+};
+
 export const getTypeColor = (typeName: string): string => {
   return typeColors[typeName] || 'bg-gray-400';
+};
+
+export const getTypeColorValue = (typeName: string): string => {
+  return typeColorValues[typeName] || '#9ca3af';
 };
