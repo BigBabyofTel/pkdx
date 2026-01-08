@@ -27,9 +27,9 @@ const backgroundStyle = computed(() => {
     // Single type: use gradient with lighter shade (dd = ~87% opacity)
     return `background: linear-gradient(to bottom, ${firstTypeColor}, ${firstTypeColor}dd)`;
   } else {
-    // Dual type: gradient between both colors
+    // Dual type: gradient with first type dominant (70% first type, 30% second type)
     const secondTypeColor = getTypeColorValue(types[1]?.type?.name || 'normal');
-    return `background: linear-gradient(135deg, ${firstTypeColor}, ${secondTypeColor})`;
+    return `background: linear-gradient(135deg, ${firstTypeColor} 0%, ${firstTypeColor} 60%, ${secondTypeColor} 100%)`;
   }
 });
 </script>
