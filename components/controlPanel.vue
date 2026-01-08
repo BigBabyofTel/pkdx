@@ -8,6 +8,7 @@ import StatsDisplay from './statsDisplay.vue';
 import ImagePortal from './imagePortal.vue';
 import DataView from './dataView.vue';
 import MovesList from './movesList.vue';
+import FilterPanel from './filterPanel.vue';
 
 const { setPokemonData } = usePokemonStore();
 
@@ -17,6 +18,7 @@ const error = ref<string | null>(null);
 const pokemon = ref<PkmnState | null>(null);
 const pkId = ref<number | null>(null);
 const dataEntry = ref<PkmnSpecies | null>(null);
+const showFilter = ref(false);
 
 const updateValue = useDebounceFn((value: string | number | null) => {
   search.value = value;
@@ -80,15 +82,20 @@ const goToPrevious = () => {
   }
 };
 
-// ...existing code...
+const goToNext = () => {
+  if (pkId.value) {
+    search.value = pkId.value + 1;
+    handleSubmit();
+  }
+};
 </script>
 
 <template>
   <div class="w-full h-screen flex flex-col bg-white">
-    <!-- Header with navigation and search controls -->
-    <div class="bg-red-500 px-4 py-3 flex items-center justify-between">
+    <!-- Mobile Header (hidden on tablet) -->
+    <div class="bg-red-500 px-4 py-3 flex items-center justify-between md:hidden">
       <button
-        class="flex items-center text-white gap-1 hover:opacity-80"
+        class="flex items-center text-white gap-1 hover:opacity-80 transition-opacity"
         @click="goToPrevious"
       >
         <Icon name="material-symbols:arrow-back" size="20" />
@@ -99,15 +106,58 @@ const goToPrevious = () => {
         :value="search"
         type="text"
         placeholder="Search Pokémon by name or ID"
-        class="rounded-2xl p-2 text-sm"
+        class="rounded-2xl p-2 text-sm flex-1 mx-2"
         @input="(e) => updateValue((e.target as HTMLInputElement).value)"
         @keydown.enter="handleSubmit"
       >
       <div class="flex items-center gap-2 text-white">
-        <button class="hover:opacity-80" @click="handleSubmit">
+        <button class="hover:opacity-80 transition-opacity" @click="handleSubmit">
           <Icon name="material-symbols:search" size="20" />
         </button>
-        <button class="hover:opacity-80 text-white">
+        <button
+          class="hover:opacity-80 transition-opacity"
+          @click="showFilter = !showFilter"
+        >
+          <Icon name="material-symbols:tune" size="20" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Tablet Header (shown on tablet and above) -->
+    <div class="hidden md:flex bg-red-500 px-6 py-3 items-center justify-between">
+      <div class="flex items-center gap-2">
+        <button
+          class="flex items-center text-white gap-1 hover:opacity-80 transition-opacity px-3 py-2"
+          @click="goToPrevious"
+        >
+          <Icon name="material-symbols:arrow-back" size="20" />
+          <span class="text-sm">Previous</span>
+        </button>
+        <button
+          class="flex items-center text-white gap-1 hover:opacity-80 transition-opacity px-3 py-2"
+          @click="goToNext"
+        >
+          <span class="text-sm">Next</span>
+          <Icon name="material-symbols:arrow-forward" size="20" />
+        </button>
+      </div>
+
+      <input
+        :value="search"
+        type="text"
+        placeholder="Search Pokémon by name or ID"
+        class="rounded-2xl p-2 text-sm flex-1 mx-4"
+        @input="(e) => updateValue((e.target as HTMLInputElement).value)"
+        @keydown.enter="handleSubmit"
+      >
+      <div class="flex items-center gap-2 text-white">
+        <button class="hover:opacity-80 transition-opacity" @click="handleSubmit">
+          <Icon name="material-symbols:search" size="20" />
+        </button>
+        <button
+          class="hover:opacity-80 transition-opacity"
+          @click="showFilter = !showFilter"
+        >
           <Icon name="material-symbols:tune" size="20" />
         </button>
       </div>
@@ -118,30 +168,51 @@ const goToPrevious = () => {
       {{ error }}
     </div>
 
-    <!-- Search bar (hidden but functional) -->
-
-    <!-- Main content area -->
-    <div class="flex-1 overflow-y-auto bg-white">
-      <div class="flex flex-col">
+    <!-- Main content area - Responsive Grid Layout -->
+    <div class="flex-1 overflow-hidden bg-white md:flex md:gap-0">
+      <!-- Mobile: Vertical layout, Tablet: Left column with image -->
+      <div class="w-full md:w-1/3 overflow-y-auto md:border-r md:border-gray-200">
         <!-- Image Section -->
         <ImagePortal v-if="pokemon" :pokemon="pokemon" />
+      </div>
 
-        <!-- Info Display (Height, Weight) - Full Width -->
-        <div v-if="pokemon" class="w-full bg-white px-4 py-4">
-          <InfoDisplay :pokemon="pokemon" />
+      <!-- Tablet: Right column with scrollable details -->
+      <div class="w-full md:w-2/3 overflow-y-auto">
+        <div class="flex flex-col divide-y divide-gray-100">
+          <!-- Info Display (Height, Weight) -->
+          <div v-if="pokemon" class="w-full bg-white px-4 md:px-6 py-4">
+            <InfoDisplay :pokemon="pokemon" />
+          </div>
+
+          <!-- Stats Radar -->
+          <div v-if="pokemon" class="w-full bg-white px-4 md:px-6 py-4">
+            <StatsDisplay :pokemon="pokemon" />
+          </div>
+
+          <!-- Pokedex Entry Section -->
+          <div v-if="dataEntry" class="w-full">
+            <DataView :data-entry="dataEntry" />
+          </div>
+
+          <!-- Moves List Section -->
+          <div v-if="pokemon" class="w-full">
+            <MovesList :pokemon="pokemon" />
+          </div>
         </div>
-
-        <!-- Stats Radar - Full Width -->
-        <div v-if="pokemon" class="w-full bg-white px-4 py-4">
-          <StatsDisplay :pokemon="pokemon" />
-        </div>
-
-        <!-- Pokedex Entry Section -->
-        <DataView v-if="dataEntry" :data-entry="dataEntry" />
-
-        <!-- Moves List Section -->
-        <MovesList v-if="pokemon" :pokemon="pokemon" />
       </div>
     </div>
+
+    <!-- Filter Panel with Transition -->
+    <Transition
+      enter-active-class="transition-transform duration-300"
+      leave-active-class="transition-transform duration-300"
+      enter-from-class="-translate-x-full"
+      leave-to-class="-translate-x-full"
+    >
+      <FilterPanel
+        v-if="showFilter"
+        @close="showFilter = false"
+      />
+    </Transition>
   </div>
 </template>
