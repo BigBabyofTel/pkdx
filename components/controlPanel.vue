@@ -92,8 +92,8 @@ const goToNext = () => {
 
 <template>
   <div class="w-full h-screen flex flex-col bg-white">
-    <!-- Mobile Header (hidden on tablet) -->
-    <div class="bg-red-500 px-4 py-3 flex items-center justify-between md:hidden">
+    <!-- Mobile & Tablet Portrait Header (hidden on tablet landscape) -->
+    <div class="bg-red-500 px-4 py-3 flex items-center justify-between lg:hidden">
       <button
         class="flex items-center text-white gap-1 hover:opacity-80 transition-opacity"
         @click="goToPrevious"
@@ -123,8 +123,8 @@ const goToNext = () => {
       </div>
     </div>
 
-    <!-- Tablet Header (shown on tablet and above) -->
-    <div class="hidden md:flex bg-red-500 px-6 py-3 items-center justify-between">
+    <!-- Tablet Landscape Header (shown on large screens) -->
+    <div class="hidden lg:flex bg-red-500 px-6 py-3 items-center justify-between">
       <div class="flex items-center gap-2">
         <button
           class="flex items-center text-white gap-1 hover:opacity-80 transition-opacity px-3 py-2"
@@ -169,16 +169,13 @@ const goToNext = () => {
     </div>
 
     <!-- Main content area - Responsive Grid Layout -->
-    <div class="flex-1 overflow-hidden bg-white md:flex md:gap-0">
-      <!-- Mobile: Vertical layout, Tablet: Left column with image -->
-      <div class="w-full md:w-1/3 overflow-y-auto md:border-r md:border-gray-200">
-        <!-- Image Section -->
-        <ImagePortal v-if="pokemon" :pokemon="pokemon" />
-      </div>
+    <div class="flex-1 overflow-hidden bg-white">
+      <!-- Mobile & Tablet Portrait: Single column vertical layout -->
+      <div class="h-full overflow-y-auto lg:hidden">
+        <div class="flex flex-col">
+          <!-- Image Section -->
+          <ImagePortal v-if="pokemon" :pokemon="pokemon" />
 
-      <!-- Tablet: Right column with scrollable details -->
-      <div class="w-full md:w-2/3 overflow-y-auto">
-        <div class="flex flex-col divide-y divide-gray-100">
           <!-- Info Display (Height, Weight) -->
           <div v-if="pokemon" class="w-full bg-white px-4 md:px-6 py-4">
             <InfoDisplay :pokemon="pokemon" />
@@ -197,6 +194,39 @@ const goToNext = () => {
           <!-- Moves List Section -->
           <div v-if="pokemon" class="w-full">
             <MovesList :pokemon="pokemon" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Tablet Landscape: Two-column layout -->
+      <div class="hidden lg:flex h-full">
+        <!-- Left column with image -->
+        <div class="w-1/3 overflow-y-auto border-r border-gray-200">
+          <ImagePortal v-if="pokemon" :pokemon="pokemon" />
+        </div>
+
+        <!-- Right column with scrollable details -->
+        <div class="w-2/3 overflow-y-auto">
+          <div class="flex flex-col divide-y divide-gray-100">
+            <!-- Info Display (Height, Weight) -->
+            <div v-if="pokemon" class="w-full bg-white px-6 py-4">
+              <InfoDisplay :pokemon="pokemon" />
+            </div>
+
+            <!-- Stats Radar -->
+            <div v-if="pokemon" class="w-full bg-white px-6 py-4">
+              <StatsDisplay :pokemon="pokemon" />
+            </div>
+
+            <!-- Pokedex Entry Section -->
+            <div v-if="dataEntry" class="w-full">
+              <DataView :data-entry="dataEntry" />
+            </div>
+
+            <!-- Moves List Section -->
+            <div v-if="pokemon" class="w-full">
+              <MovesList :pokemon="pokemon" />
+            </div>
           </div>
         </div>
       </div>
