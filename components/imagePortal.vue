@@ -15,14 +15,16 @@ const props = defineProps({
 // Compute background style based on Pokemon types
 const backgroundStyle = computed(() => {
   const types = props.pokemon.types;
+  const defaultColor = getTypeColorValue('normal');
+  
   if (!types || types.length === 0) {
-    return 'background: linear-gradient(to bottom, #ef4444, #f87171)'; // Default red
+    return `background: linear-gradient(to bottom, ${defaultColor}, ${defaultColor}dd)`;
   }
   
   const firstTypeColor = getTypeColorValue(types[0]?.type?.name || 'normal');
   
   if (types.length === 1) {
-    // Single type: use gradient with lighter shade
+    // Single type: use gradient with lighter shade (dd = ~87% opacity)
     return `background: linear-gradient(to bottom, ${firstTypeColor}, ${firstTypeColor}dd)`;
   } else {
     // Dual type: gradient between both colors
