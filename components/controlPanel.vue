@@ -3,6 +3,8 @@ import type { PkmnSpecies, PkmnState } from '../utils/types';
 import { ref } from 'vue';
 import { usePokemonStore } from '../composables/pokemonStore';
 import { useDebounceFn } from '@vueuse/core';
+import { getCapital, getKgs, getCm } from '../utils/utils';
+import { getTypeColor } from '../utils/typeColors';
 import InfoDisplay from './infoDisplay.vue';
 import StatsDisplay from './statsDisplay.vue';
 import ImagePortal from './imagePortal.vue';
@@ -123,48 +125,8 @@ const goToNext = () => {
       </div>
     </div>
 
-    <!-- Tablet Landscape Header (shown on large screens) -->
-    <div class="hidden lg:flex bg-red-500 px-6 py-3 items-center justify-between">
-      <div class="flex items-center gap-2">
-        <button
-          class="flex items-center text-white gap-1 hover:opacity-80 transition-opacity px-3 py-2"
-          @click="goToPrevious"
-        >
-          <Icon name="material-symbols:arrow-back" size="20" />
-          <span class="text-sm">Previous</span>
-        </button>
-        <button
-          class="flex items-center text-white gap-1 hover:opacity-80 transition-opacity px-3 py-2"
-          @click="goToNext"
-        >
-          <span class="text-sm">Next</span>
-          <Icon name="material-symbols:arrow-forward" size="20" />
-        </button>
-      </div>
-
-      <input
-        :value="search"
-        type="text"
-        placeholder="Search Pokémon by name or ID"
-        class="rounded-2xl p-2 text-sm flex-1 mx-4"
-        @input="(e) => updateValue((e.target as HTMLInputElement).value)"
-        @keydown.enter="handleSubmit"
-      >
-      <div class="flex items-center gap-2 text-white">
-        <button class="hover:opacity-80 transition-opacity" @click="handleSubmit">
-          <Icon name="material-symbols:search" size="20" />
-        </button>
-        <button
-          class="hover:opacity-80 transition-opacity"
-          @click="showFilter = !showFilter"
-        >
-          <Icon name="material-symbols:tune" size="20" />
-        </button>
-      </div>
-    </div>
-
     <!-- Error message -->
-    <div v-if="error" class="bg-red-100 text-red-700 px-4 py-2 text-center">
+    <div v-if="error" class="bg-red-100 text-red-700 px-4 py-2 text-center lg:hidden">
       {{ error }}
     </div>
 
@@ -200,32 +162,123 @@ const goToNext = () => {
 
       <!-- Tablet Landscape: Two-column layout -->
       <div class="hidden lg:flex h-full">
-        <!-- Left column with image -->
-        <div class="w-1/3 overflow-y-auto border-r border-gray-200">
-          <ImagePortal v-if="pokemon" :pokemon="pokemon" />
+        <!-- Left column with search, image, and basic info -->
+        <div class="w-5/12 flex flex-col">
+          <!-- Search Bar and Filter with blue background -->
+          <div class="bg-blue-400 px-6 py-4 flex items-center gap-3">
+            <div class="flex-1 relative">
+              <Icon 
+                name="material-symbols:search" 
+                size="20" 
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              />
+              <input
+                :value="search"
+                type="text"
+                placeholder="Search"
+                class="w-full rounded-full pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-white border-2 border-white/30"
+                @input="(e) => updateValue((e.target as HTMLInputElement).value)"
+                @keydown.enter="handleSubmit"
+              >
+            </div>
+            <button
+              class="text-white hover:opacity-80 transition-opacity flex flex-col items-center gap-0.5"
+              @click="showFilter = !showFilter"
+            >
+              <Icon name="material-symbols:tune" size="28" />
+              <span class="text-xs font-medium">Filter</span>
+            </button>
+          </div>
+
+          <!-- Pokemon Image, Name, and Info with blue background -->
+          <div v-if="pokemon" class="flex-1 flex flex-col bg-gradient-to-b from-blue-400 to-blue-300 relative">
+            <!-- Pokemon Image -->
+            <div class="flex-1 flex items-center justify-center py-8">
+              <img
+                :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id as number}.png`"
+                :alt="`Pokemon #${pokemon.id}`"
+                class="w-80 h-80 object-contain drop-shadow-2xl"
+              >
+            </div>
+
+            <!-- Curved white overlay -->
+            <div class="absolute bottom-0 left-0 right-0 h-24 bg-white" style="border-radius: 50% 50% 0 0 / 30px 30px 0 0;" />
+            
+            <!-- Pokemon Name, Number and Type Badges -->
+            <div class="relative z-10 bg-white pt-8 pb-4 flex flex-col items-center">
+              <h2 class="text-3xl font-bold text-gray-900 text-center">
+                #{{ String(pokemon.id).padStart(3, '0') }} {{ getCapital(pokemon.name as string) }}
+              </h2>
+
+              <!-- Type Badges -->
+              <div class="flex gap-2 mt-3 flex-wrap justify-center">
+                <span
+                  v-for="type in pokemon.types"
+                  :key="type.type.name ?? 'unknown'"
+                  :class="[
+                    getTypeColor(type.type.name ?? 'normal'),
+                    'text-white text-sm font-bold px-5 py-1.5 rounded-full capitalize',
+                  ]"
+                >
+                  {{ type?.type?.name ?? 'unknown' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Height and Weight at bottom -->
+            <div class="relative z-10 bg-gray-100 px-6 py-4 flex items-center justify-around">
+              <div class="text-center">
+                <span class="text-base text-gray-700 font-medium">Height: {{ getCm(pokemon.height as number) }}cm</span>
+              </div>
+              <div class="text-center">
+                <span class="text-base text-gray-700 font-medium">Weight: {{ getKgs(pokemon.weight as number) }}kg</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty state when no Pokemon -->
+          <div v-else class="flex-1 bg-gradient-to-b from-blue-400 to-blue-300 flex items-center justify-center">
+            <p class="text-white text-lg">Search for a Pokémon</p>
+          </div>
         </div>
 
-        <!-- Right column with scrollable details -->
-        <div class="w-2/3 overflow-y-auto">
-          <div class="flex flex-col divide-y divide-gray-100">
-            <!-- Info Display (Height, Weight) -->
-            <div v-if="pokemon" class="w-full bg-white px-6 py-4">
-              <InfoDisplay :pokemon="pokemon" />
-            </div>
+        <!-- Right column with navigation and scrollable details -->
+        <div class="w-7/12 flex flex-col bg-white">
+          <!-- Previous/Next Navigation -->
+          <div class="bg-white px-6 py-4 flex items-center justify-end gap-3 border-b border-gray-200">
+            <button
+              class="flex items-center gap-2 px-5 py-2.5 border-2 border-gray-900 rounded-lg hover:bg-gray-50 transition-colors"
+              @click="goToPrevious"
+            >
+              <Icon name="material-symbols:arrow-back" size="20" />
+              <span class="text-sm font-medium">Previous</span>
+            </button>
+            <button
+              class="flex items-center gap-2 px-5 py-2.5 border-2 border-gray-900 rounded-lg hover:bg-gray-50 transition-colors"
+              @click="goToNext"
+            >
+              <span class="text-sm font-medium">Next</span>
+              <Icon name="material-symbols:arrow-forward" size="20" />
+            </button>
+          </div>
 
-            <!-- Stats Radar -->
-            <div v-if="pokemon" class="w-full bg-white px-6 py-4">
-              <StatsDisplay :pokemon="pokemon" />
-            </div>
+          <!-- Scrollable content -->
+          <div class="flex-1 overflow-y-auto">
+            <div class="flex flex-col">
+              <!-- Stats Radar -->
+              <div v-if="pokemon" class="w-full bg-white px-6 py-6">
+                <StatsDisplay :pokemon="pokemon" />
+              </div>
 
-            <!-- Pokedex Entry Section -->
-            <div v-if="dataEntry" class="w-full">
-              <DataView :data-entry="dataEntry" />
-            </div>
+              <!-- Pokedex Entry Section -->
+              <div v-if="dataEntry" class="w-full">
+                <DataView :data-entry="dataEntry" />
+              </div>
 
-            <!-- Moves List Section -->
-            <div v-if="pokemon" class="w-full">
-              <MovesList :pokemon="pokemon" />
+              <!-- Moves List Section -->
+              <div v-if="pokemon" class="w-full">
+                <MovesList :pokemon="pokemon" />
+              </div>
             </div>
           </div>
         </div>
