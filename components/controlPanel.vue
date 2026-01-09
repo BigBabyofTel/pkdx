@@ -94,7 +94,9 @@ const goToNext = () => {
 // Compute background style based on Pokemon types for tablet landscape view
 const backgroundStyle = computed(() => {
   if (!pokemon.value) {
-    return 'background: linear-gradient(to bottom, #60a5fa, #93c5fd)'; // Default blue gradient
+    // Default to water type color for empty state (matches blue theme)
+    const defaultColor = getTypeColorValue('water');
+    return `background: linear-gradient(to bottom, ${defaultColor}, ${defaultColor}dd)`;
   }
   
   const types = pokemon.value.types;
@@ -112,14 +114,14 @@ const backgroundStyle = computed(() => {
   } else {
     // Dual type: gradient with first type dominant (60% first type transitioning to second type)
     const secondTypeColor = getTypeColorValue(types[1]?.type?.name || 'normal');
-    return `background: linear-gradient(to bottom, ${firstTypeColor} 0%, ${firstTypeColor} 60%, ${secondTypeColor} 100%)`;
+    return `background: linear-gradient(135deg, ${firstTypeColor} 0%, ${firstTypeColor} 60%, ${secondTypeColor} 100%)`;
   }
 });
 
 // Compute search bar background color based on Pokemon primary type
 const searchBarBgColor = computed(() => {
   if (!pokemon.value || !pokemon.value.types || pokemon.value.types.length === 0) {
-    return 'bg-blue-400'; // Default blue
+    return getTypeColor('water'); // Default to water type (blue)
   }
   return getTypeColor(pokemon.value.types[0]?.type?.name || 'normal');
 });
