@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { PkmnSpecies, PkmnState } from '../utils/types';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { usePokemonStore } from '../composables/pokemonStore';
 import { useDebounceFn } from '@vueuse/core';
 import { getCapital, getKgs, getCm } from '../utils/utils';
-import { getTypeColor } from '../utils/typeColors';
+import { getTypeColor, getTypeColorValue } from '../utils/typeColors';
 import InfoDisplay from './infoDisplay.vue';
 import StatsDisplay from './statsDisplay.vue';
 import ImagePortal from './imagePortal.vue';
@@ -90,6 +90,39 @@ const goToNext = () => {
     handleSubmit();
   }
 };
+
+// Compute background style based on Pokemon types for tablet landscape view
+const backgroundStyle = computed(() => {
+  if (!pokemon.value) {
+    return 'background: linear-gradient(to bottom, #60a5fa, #93c5fd)'; // Default blue gradient
+  }
+  
+  const types = pokemon.value.types;
+  const defaultColor = getTypeColorValue('normal');
+  
+  if (!types || types.length === 0) {
+    return `background: linear-gradient(to bottom, ${defaultColor}, ${defaultColor}dd)`;
+  }
+  
+  const firstTypeColor = getTypeColorValue(types[0]?.type?.name || 'normal');
+  
+  if (types.length === 1) {
+    // Single type: use gradient with lighter shade (dd = ~87% opacity)
+    return `background: linear-gradient(to bottom, ${firstTypeColor}, ${firstTypeColor}dd)`;
+  } else {
+    // Dual type: gradient with first type dominant (60% first type transitioning to second type)
+    const secondTypeColor = getTypeColorValue(types[1]?.type?.name || 'normal');
+    return `background: linear-gradient(to bottom, ${firstTypeColor} 0%, ${firstTypeColor} 60%, ${secondTypeColor} 100%)`;
+  }
+});
+
+// Compute search bar background color based on Pokemon primary type
+const searchBarBgColor = computed(() => {
+  if (!pokemon.value || !pokemon.value.types || pokemon.value.types.length === 0) {
+    return 'bg-blue-400'; // Default blue
+  }
+  return getTypeColor(pokemon.value.types[0]?.type?.name || 'normal');
+});
 </script>
 
 <template>
@@ -164,8 +197,8 @@ const goToNext = () => {
       <div class="hidden lg:flex h-full">
         <!-- Left column with search, image, and basic info -->
         <div class="w-5/12 flex flex-col">
-          <!-- Search Bar and Filter with blue background -->
-          <div class="bg-blue-400 px-6 py-4 flex items-center gap-3">
+          <!-- Search Bar and Filter with dynamic background -->
+          <div :class="[searchBarBgColor, 'px-6 py-4 flex items-center gap-3']">
             <div class="flex-1 relative">
               <Icon 
                 name="material-symbols:search" 
@@ -190,8 +223,8 @@ const goToNext = () => {
             </button>
           </div>
 
-          <!-- Pokemon Image, Name, and Info with blue background -->
-          <div v-if="pokemon" class="flex-1 flex flex-col bg-gradient-to-b from-blue-400 to-blue-300 relative">
+          <!-- Pokemon Image, Name, and Info with dynamic background -->
+          <div v-if="pokemon" :style="backgroundStyle" class="flex-1 flex flex-col relative">
             <!-- Pokemon Image -->
             <div class="flex-1 flex items-center justify-center py-8">
               <img
@@ -237,7 +270,7 @@ const goToNext = () => {
           </div>
 
           <!-- Empty state when no Pokemon -->
-          <div v-else class="flex-1 bg-gradient-to-b from-blue-400 to-blue-300 flex items-center justify-center">
+          <div v-else :style="backgroundStyle" class="flex-1 flex items-center justify-center">
             <p class="text-white text-lg">Search for a Pokémon</p>
           </div>
         </div>
